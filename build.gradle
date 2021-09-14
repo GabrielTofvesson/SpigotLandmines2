@@ -1,0 +1,96 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
+    id 'java'
+    id 'kr.entree.spigradle' version '2.2.4'
+    id("com.github.sgtsilvio.gradle.proguard") version "0.1.1"
+}
+
+group 'dev.w1zzrd.spigot.landmines2'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
+        // As of Gradle 5.1, you can limit this to only those
+        // dependencies you expect from it
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+    maven {
+        url = "https://papermc.io/repo/repository/maven-public"
+
+        content {
+            includeGroup 'io.papermc.paper'
+        }
+    }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+    mavenLocal()
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.30'
+    //implementation 'com.github.GabrielTofvesson:SpigotWizCompat:latest'
+    //implementation files('lib/SpigotWizCompat-072da001f26b738b510ac9a6edc52d338ca73070.jar')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+    compileOnly spigot('1.17.1')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+spigot {
+    authors = ['IKEAJesus']
+    depends = ['Kotlin']
+    apiVersion = '1.17'
+    load = STARTUP
+
+    /*
+    commands {
+        give {
+            aliases = ['i']
+            description = 'Give command.'
+            permission = 'test.foo'
+            permissionMessage = 'You do not have permission!'
+            usage = '/<command> [test|stop]'
+        }
+    }
+    permissions {
+        'test.foo' {
+            description = 'Allows foo command'
+            defaults = 'true'
+        }
+        'test.*' {
+            description = 'Wildcard permission'
+            defaults = 'op'
+            children = ['test.foo': true]
+        }
+    }
+    */
+
+    debug {
+        jvmArgs '-Xmx4G'
+        buildVersion = "1.17.1"
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}

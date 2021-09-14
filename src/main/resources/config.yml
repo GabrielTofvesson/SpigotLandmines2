@@ -1,0 +1,3 @@
+# Leave gcTrigger alone unless you know what you are doing
+gcTrigger: 10000
+explosionStrength: 2.0
