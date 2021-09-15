@@ -4,6 +4,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.HandlerList
@@ -31,6 +32,7 @@ private val threadLocalBuffer = ThreadLocal.withInitial { ByteBuffer.allocate(16
 
 class LandmineManager(
     private val plugin: Plugin,
+    private val enchantment: Enchantment,
     private val landmineData: YamlFile
 ): Listener {
     private var landmines: SortedList<LandmineData> = SortedList.create(comparator = LANDMINE_COMPARATOR)
@@ -174,10 +176,11 @@ class LandmineManager(
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerPlaceMine(placeEvent: BlockPlaceEvent) {
-        if (placeEvent.blockPlaced.type == Material.STONE_PRESSURE_PLATE && !placeEvent.isCancelled) {
-            if (placeMine(placeEvent.player, placeEvent.blockPlaced.location)) {
+        if (placeEvent.blockPlaced.type == Material.STONE_PRESSURE_PLATE &&
+            placeEvent.itemInHand.itemMeta?.enchants?.contains(enchantment) == true &&
+            !placeEvent.isCancelled) {
+            if (placeMine(placeEvent.player, placeEvent.blockPlaced.location))
                 --placeEvent.player.inventory.getItem(placeEvent.hand).amount
-            }
 
             placeEvent.isCancelled = true
         }

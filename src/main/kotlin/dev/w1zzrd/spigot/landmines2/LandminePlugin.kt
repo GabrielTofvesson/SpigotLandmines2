@@ -52,7 +52,11 @@ class LandminePlugin: JavaPlugin() {
         stack.itemMeta = meta
 
         saveDefaultConfig()
-        landmineManager = LandmineManager(this, YamlFile(File(dataFolder, "data.yml")))
+        landmineManager = LandmineManager(
+            this,
+            enchantment,
+            YamlFile(File(dataFolder, "data.yml"))
+        )
         landmineManager!!.onEnable()
 
         Bukkit.addRecipe(ShapelessRecipe(recipeKey, stack).addIngredient(Material.STONE_PRESSURE_PLATE).addIngredient(Material.TNT))
